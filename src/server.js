@@ -1,8 +1,9 @@
 const Fastify = require('fastify');
 const { openDatabase } = require('./database');
+const { taskRoutes } = require('./tasks');
 
 function buildServer({ dbPath, logger = false } = {}) {
-  const app = Fastify({ logger });
+  const app = Fastify({ logger, ajv: { customOptions: { coerceTypes: false } } });
   const db = openDatabase(dbPath);
 
   app.decorate('db', db);
@@ -12,6 +13,8 @@ function buildServer({ dbPath, logger = false } = {}) {
     db.prepare('SELECT 1').get();
     return { status: 'ok' };
   });
+
+  app.register(taskRoutes, { prefix: '/api/tasks' });
 
   return app;
 }
