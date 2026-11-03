@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ritmo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <h1>Ritmo</h1>
+
+    <form id="task-form" class="task-form" novalidate>
+      <label for="task-title" class="visually-hidden">Nova tarefa</label>
+      <input id="task-title" type="text" placeholder="O que você precisa fazer?" autocomplete="off">
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <p id="error" class="error" role="alert" hidden></p>
+
+    <p id="empty" class="empty" hidden>Nenhuma tarefa cadastrada.</p>
+    <ul id="task-list" class="task-list" aria-label="Tarefas"></ul>
+  </main>
+</body>
+</html>

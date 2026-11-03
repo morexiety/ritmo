@@ -1,0 +1,160 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1f2328;
+  --muted: #6b7280;
+  --border: #d9dde3;
+  --primary: #2f5bd3;
+  --primary-hover: #2449ad;
+  --on-primary: #ffffff;
+  --danger: #b42318;
+  --danger-bg: #fdecea;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171b;
+    --surface: #1f2228;
+    --text: #e6e8eb;
+    --muted: #9aa1ab;
+    --border: #353a42;
+    --primary: #6d8ff0;
+    --primary-hover: #8aa6f5;
+    --on-primary: #10131a;
+    --danger: #f8a29a;
+    --danger-bg: #3a1d1b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+h1 {
+  margin: 0 0 24px;
+  font-size: 2rem;
+}
+
+.task-form {
+  display: flex;
+  gap: 8px;
+}
+
+input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-hover);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.empty {
+  margin: 24px 0 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.task-list {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.task input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--primary);
+}
+
+.task label {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.task.done label {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.task .delete {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--border);
+}
+
+.task .delete:hover {
+  background: var(--danger-bg);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -24,3 +24,19 @@ test('servidor inicia com o banco conectado e mantém os dados após reiniciar',
 
   assert.equal(total, 1);
 });
+
+test('serve a interface web com os tipos corretos', async (t) => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ritmo-'));
+  const app = buildServer({ dbPath: path.join(tmpDir, 'ritmo.db') });
+  t.after(async () => {
+    await app.close();
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  const files = { '/': 'text/html', '/styles.css': 'text/css', '/app.js': 'text/javascript' };
+  for (const [url, type] of Object.entries(files)) {
+    const res = await app.inject({ method: 'GET', url });
+    assert.equal(res.statusCode, 200, url);
+    assert.ok(res.headers['content-type'].startsWith(type), url);
+  }
+});
