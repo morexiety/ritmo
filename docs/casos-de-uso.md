@@ -2,7 +2,11 @@
 
 ## Diagrama
 
-Diagrama em PlantUML, que pode ser renderizado em [plantuml.com](https://www.plantuml.com/plantuml) ou com a extensão PlantUML do VS Code ou do IntelliJ:
+![Diagrama de casos de uso](diagramas/casos-de-uso.svg)
+
+Versão em PNG para documentos: [`diagramas/casos-de-uso.png`](diagramas/casos-de-uso.png).
+
+Fonte equivalente em PlantUML:
 
 ```plantuml
 @startuml casos-de-uso
@@ -18,10 +22,10 @@ rectangle "Ritmo" {
   usecase "UC04\nExcluir tarefa" as UC04
 }
 
-usuario --> UC01
-usuario --> UC02
-usuario --> UC03
-usuario --> UC04
+usuario -- UC01
+usuario -- UC02
+usuario -- UC03
+usuario -- UC04
 @enduml
 ```
 
