@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    init: true
+    restart: unless-stopped
+    volumes:
+      - ritmo-data:/app/data
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  ritmo-data:

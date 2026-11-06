@@ -53,6 +53,23 @@ O arquivo do banco e a pasta `data/` são criados automaticamente na primeira ex
 
 Ao iniciar, a aplicação migra automaticamente o banco existente: acrescenta as tabelas de usuários e sessões e a coluna `tasks.user_id`. As tarefas antigas são preservadas, mas ficam sem dono e não aparecem para nenhuma conta. Para atribuí-las a uma conta, veja [Migração de bancos existentes](docs/modelo-de-dados.md#migração-de-bancos-existentes).
 
+## Implantação com Docker
+
+O repositório inclui `Dockerfile` e `docker-compose.yml` com dois containers: `app` (o Ritmo, sem porta exposta) e `nginx` (proxy reverso na porta 80). O HTTPS fica a cargo do Cloudflare, com o domínio em modo proxy:
+
+- no Cloudflare, use **SSL/TLS: Flexible** e ative **Always Use HTTPS**;
+- o HTTPS é obrigatório, pois em produção o cookie de sessão tem o atributo `Secure`.
+
+Na VPS, com Docker instalado e a porta 80 liberada:
+
+```bash
+git clone https://github.com/morexiety/ritmo.git
+cd ritmo
+docker compose up -d --build
+```
+
+Para atualizar, rode `git pull` e `docker compose up -d --build`. O banco fica no volume `ritmo-data` e é mantido entre atualizações; não use `docker compose down -v`, que apaga os volumes.
+
 ## Testes
 
 ```bash
@@ -72,6 +89,9 @@ ritmo/
 │   ├── tasks.js       rotas da API de tarefas
 │   └── database.js    conexão com o SQLite, migração e aplicação do schema
 ├── sql/schema.sql     definição das tabelas users, sessions e tasks
+├── nginx/default.conf configuração do Nginx (proxy reverso)
+├── Dockerfile         imagem da aplicação
+├── docker-compose.yml containers app e Nginx
 ├── test/              testes automatizados
 └── docs/              documentação técnica
 ```
