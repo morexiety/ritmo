@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Criar conta — Ritmo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/auth.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <h1>Ritmo</h1>
+    <h2>Criar conta</h2>
+
+    <form id="auth-form" class="auth-form" data-endpoint="/api/auth/register">
+      <label for="username">Nome de usuário</label>
+      <input id="username" name="username" type="text" autocomplete="username"
+             pattern="[A-Za-z0-9._\-]{3,30}" maxlength="30" aria-describedby="username-hint" required>
+      <p id="username-hint" class="hint">De 3 a 30 caracteres: letras sem acento, números, ponto, hífen ou sublinhado.</p>
+
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
+
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" autocomplete="new-password"
+             minlength="8" maxlength="128" aria-describedby="password-hint" required>
+      <p id="password-hint" class="hint">Mínimo de 8 caracteres.</p>
+
+      <button type="submit">Criar conta</button>
+    </form>
+
+    <p id="error" class="error" role="alert" hidden></p>
+
+    <p class="auth-switch">Já tem conta? <a href="/login">Entrar</a></p>
+  </main>
+</body>
+</html>

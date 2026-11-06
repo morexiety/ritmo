@@ -5,15 +5,25 @@ const list = document.getElementById('task-list');
 const empty = document.getElementById('empty');
 const errorBox = document.getElementById('error');
 const statusBox = document.getElementById('status');
+const currentUser = document.getElementById('current-user');
+const logoutButton = document.getElementById('logout');
+
+let csrfToken = '';
 
 async function request(method, url, body) {
-  const options = { method };
+  const options = { method, headers: {} };
+  if (method !== 'GET') {
+    options.headers['X-CSRF-Token'] = csrfToken;
+  }
   if (body !== undefined) {
-    options.headers = { 'Content-Type': 'application/json' };
+    options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(body);
   }
 
   const res = await fetch(url, options);
+  if (res.status === 401) {
+    window.location.assign('/login');
+  }
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}`);
   }
@@ -134,5 +144,30 @@ async function deleteTask(id, title) {
   input.focus();
 }
 
+async function logout() {
+  clearError();
+  logoutButton.disabled = true;
+  try {
+    await request('POST', '/api/auth/logout');
+    window.location.assign('/login');
+  } catch {
+    logoutButton.disabled = false;
+    showError('Não foi possível sair.');
+  }
+}
+
+async function start() {
+  try {
+    const session = await request('GET', '/api/auth/me');
+    csrfToken = session.csrfToken;
+    currentUser.textContent = session.user.username;
+  } catch {
+    showError('Não foi possível carregar a sessão.');
+    return;
+  }
+  await loadTasks();
+}
+
 form.addEventListener('submit', addTask);
-loadTasks();
+logoutButton.addEventListener('click', logout);
+start();

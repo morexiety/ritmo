@@ -1,3 +1,5 @@
+const { requireAuth } = require('./auth');
+
 const idParams = {
   type: 'object',
   required: ['id'],
@@ -27,26 +29,35 @@ function notFound(reply) {
 async function taskRoutes(app) {
   const { db } = app;
 
+  app.addHook('onRequest', requireAuth);
+
   app.post('/', { schema: { body: createBody } }, async (request, reply) => {
     const row = db
-      .prepare('INSERT INTO tasks (title) VALUES (?) RETURNING *')
-      .get(request.body.title.trim());
+      .prepare('INSERT INTO tasks (title, user_id) VALUES (?, ?) RETURNING id, title, completed, created_at')
+      .get(request.body.title.trim(), request.user.id);
     return reply.code(201).send(toTask(row));
   });
 
-  app.get('/', async () => {
-    return db.prepare('SELECT * FROM tasks ORDER BY id').all().map(toTask);
+  app.get('/', async (request) => {
+    return db
+      .prepare('SELECT id, title, completed, created_at FROM tasks WHERE user_id = ? ORDER BY id')
+      .all(request.user.id)
+      .map(toTask);
   });
 
   app.patch('/:id', { schema: { params: idParams, body: updateBody } }, async (request, reply) => {
     const row = db
-      .prepare('UPDATE tasks SET completed = ? WHERE id = ? RETURNING *')
-      .get(request.body.completed ? 1 : 0, Number(request.params.id));
+      .prepare(
+        'UPDATE tasks SET completed = ? WHERE id = ? AND user_id = ? RETURNING id, title, completed, created_at',
+      )
+      .get(request.body.completed ? 1 : 0, Number(request.params.id), request.user.id);
     return row ? toTask(row) : notFound(reply);
   });
 
   app.delete('/:id', { schema: { params: idParams } }, async (request, reply) => {
-    const { changes } = db.prepare('DELETE FROM tasks WHERE id = ?').run(Number(request.params.id));
+    const { changes } = db
+      .prepare('DELETE FROM tasks WHERE id = ? AND user_id = ?')
+      .run(Number(request.params.id), request.user.id);
     return changes ? reply.code(204).send() : notFound(reply);
   });
 }

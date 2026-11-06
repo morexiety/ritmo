@@ -56,6 +56,8 @@ let confirmMessages;
 let confirmAnswer;
 let pending;
 let ui;
+let session;
+let navigations;
 
 async function fakeFetch(url, options) {
   requests.push({ method: options.method, url });
@@ -64,7 +66,7 @@ async function fakeFetch(url, options) {
     const res = await server.inject({
       method: options.method,
       url,
-      headers: options.headers,
+      headers: { ...options.headers, cookie: session.cookie },
       payload: options.body,
     });
     return {
@@ -93,6 +95,8 @@ function loadApp() {
     empty: new FakeElement('p'),
     error: new FakeElement('p'),
     status: new FakeElement('p'),
+    'current-user': new FakeElement('span'),
+    logout: new FakeElement('button'),
   };
 
   const context = vm.createContext({
@@ -105,6 +109,7 @@ function loadApp() {
         confirmMessages.push(message);
         return confirmAnswer;
       },
+      location: { assign: (url) => navigations.push(url) },
     },
     fetch: fakeFetch,
   });
@@ -135,6 +140,13 @@ beforeEach(async () => {
   confirmMessages = [];
   confirmAnswer = true;
   pending = 0;
+  navigations = [];
+  const res = await server.inject({
+    method: 'POST',
+    url: '/api/auth/register',
+    payload: { username: 'ana', email: 'ana@example.com', password: 'senha-segura' },
+  });
+  session = { cookie: res.headers['set-cookie'].split(';')[0] };
   ui = loadApp();
   await settle();
 });
@@ -204,4 +216,29 @@ test('falha na exclusão mantém a mensagem de erro e não anuncia sucesso', asy
   assert.equal(ui.error.hidden, false);
   assert.equal(ui.error.textContent, 'Não foi possível excluir a tarefa.');
   assert.equal(ui.status.textContent, '');
+});
+
+test('exibe o usuário autenticado ao carregar a página', () => {
+  assert.equal(ui['current-user'].textContent, 'ana');
+  assert.deepEqual(requests.map((r) => `${r.method} ${r.url}`), ['GET /api/auth/me', 'GET /api/tasks']);
+});
+
+test('sair encerra a sessão e volta para o login', async () => {
+  await ui.logout.dispatch('click');
+
+  assert.ok(requests.some((r) => r.method === 'POST' && r.url === '/api/auth/logout'));
+  assert.equal(server.db.prepare('SELECT COUNT(*) AS total FROM sessions').get().total, 0);
+  assert.deepEqual(navigations, ['/login']);
+});
+
+test('redireciona para o login quando a sessão deixa de ser válida', async () => {
+  await addTaskViaForm('Qualquer');
+  server.db.prepare('DELETE FROM sessions').run();
+
+  const [task] = taskItems();
+  task.checkbox.checked = true;
+  await task.checkbox.dispatch('change');
+
+  assert.ok(navigations.length > 0);
+  assert.ok(navigations.every((url) => url === '/login'));
 });

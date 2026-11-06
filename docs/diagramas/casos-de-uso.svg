@@ -1,24 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f2328">
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="660" viewBox="0 0 640 660" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#1f2328">
   <title>Diagrama de casos de uso do Ritmo</title>
-  <rect width="640" height="420" fill="#ffffff"/>
+  <rect width="640" height="660" fill="#ffffff"/>
 
   <g stroke="#1f2328" stroke-width="1.5" fill="none">
-    <circle cx="90" cy="150" r="14"/>
-    <line x1="90" y1="164" x2="90" y2="210"/>
-    <line x1="64" y1="180" x2="116" y2="180"/>
-    <line x1="90" y1="210" x2="68" y2="246"/>
-    <line x1="90" y1="210" x2="112" y2="246"/>
+    <circle cx="90" cy="300" r="14"/>
+    <line x1="90" y1="314" x2="90" y2="360"/>
+    <line x1="64" y1="330" x2="116" y2="330"/>
+    <line x1="90" y1="360" x2="68" y2="396"/>
+    <line x1="90" y1="360" x2="112" y2="396"/>
   </g>
-  <text x="90" y="270" text-anchor="middle">Usuário</text>
+  <text x="90" y="420" text-anchor="middle">Usuário</text>
 
-  <rect x="220" y="20" width="380" height="380" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+  <rect x="220" y="20" width="380" height="620" fill="none" stroke="#1f2328" stroke-width="1.5"/>
   <text x="236" y="44" font-weight="bold">Ritmo</text>
 
   <g stroke="#1f2328" stroke-width="1.2">
-    <line x1="120" y1="180" x2="280" y2="95"/>
-    <line x1="120" y1="180" x2="280" y2="175"/>
-    <line x1="120" y1="180" x2="280" y2="255"/>
-    <line x1="120" y1="180" x2="280" y2="335"/>
+    <line x1="120" y1="330" x2="280" y2="95"/>
+    <line x1="120" y1="330" x2="280" y2="175"/>
+    <line x1="120" y1="330" x2="280" y2="255"/>
+    <line x1="120" y1="330" x2="280" y2="335"/>
+    <line x1="120" y1="330" x2="280" y2="415"/>
+    <line x1="120" y1="330" x2="280" y2="495"/>
+    <line x1="120" y1="330" x2="280" y2="575"/>
   </g>
 
   <g fill="#eef2fb" stroke="#1f2328" stroke-width="1.5">
@@ -26,6 +29,9 @@
     <ellipse cx="410" cy="175" rx="130" ry="32"/>
     <ellipse cx="410" cy="255" rx="130" ry="32"/>
     <ellipse cx="410" cy="335" rx="130" ry="32"/>
+    <ellipse cx="410" cy="415" rx="130" ry="32"/>
+    <ellipse cx="410" cy="495" rx="130" ry="32"/>
+    <ellipse cx="410" cy="575" rx="130" ry="32"/>
   </g>
 
   <g text-anchor="middle">
@@ -33,5 +39,8 @@
     <text x="410" y="171"><tspan x="410" font-weight="bold">UC02</tspan><tspan x="410" dy="18">Visualizar tarefas</tspan></text>
     <text x="410" y="251"><tspan x="410" font-weight="bold">UC03</tspan><tspan x="410" dy="18">Concluir ou reabrir tarefa</tspan></text>
     <text x="410" y="331"><tspan x="410" font-weight="bold">UC04</tspan><tspan x="410" dy="18">Excluir tarefa</tspan></text>
+    <text x="410" y="411"><tspan x="410" font-weight="bold">UC05</tspan><tspan x="410" dy="18">Criar conta</tspan></text>
+    <text x="410" y="491"><tspan x="410" font-weight="bold">UC06</tspan><tspan x="410" dy="18">Entrar</tspan></text>
+    <text x="410" y="571"><tspan x="410" font-weight="bold">UC07</tspan><tspan x="410" dy="18">Sair</tspan></text>
   </g>
 </svg>
