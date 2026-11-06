@@ -17,6 +17,7 @@ Requisitos do MVP do Ritmo, descritos a partir do comportamento implementado. A 
 | RF09 | A interface deve exibir a mensagem "Nenhuma tarefa cadastrada." quando a lista estiver vazia. | Verificação manual |
 | RF10 | A interface deve exibir uma mensagem de erro quando uma operação falhar. | Verificação manual |
 | RF11 | As tarefas devem ser mantidas após reiniciar a aplicação. | `test/database.test.js`, `test/server.test.js`, `test/tasks.test.js` |
+| RF19 | A exclusão de uma tarefa deve ser confirmada pelo usuário; ao cancelar, nada é alterado. | `test/app.test.js` |
 
 ## Requisitos não funcionais
 
@@ -28,7 +29,7 @@ Requisitos do MVP do Ritmo, descritos a partir do comportamento implementado. A 
 | RNF04 | Interface da API | Responder em JSON; entradas inválidas retornam HTTP 400 e identificadores inexistentes, HTTP 404. |
 | RNF05 | Segurança | Usar consultas SQL parametrizadas; inserir os títulos na página como texto (sem interpretar HTML); escutar apenas em `127.0.0.1` por padrão. |
 | RNF06 | Usabilidade | Interface em português, com uma única página e atualização da lista após cada operação. |
-| RNF07 | Acessibilidade | Campos e botões com rótulos acessíveis, mensagens de erro anunciadas a leitores de tela (`role="alert"`), foco visível e botões com altura mínima de 44 px. |
+| RNF07 | Acessibilidade | Campos e botões com rótulos acessíveis, mensagens de erro anunciadas a leitores de tela (`role="alert"`), operações concluídas anunciadas por uma região `role="status"`, foco visível e botões com altura mínima de 44 px. |
 | RNF08 | Responsividade | Layout utilizável em telas a partir de 375 px de largura, sem rolagem horizontal, com tema claro e escuro conforme o sistema. |
 | RNF09 | Testabilidade | O servidor deve aceitar o caminho do banco por parâmetro, permitindo testes com banco isolado. |
 

@@ -4,6 +4,7 @@ const submitButton = form.querySelector('button');
 const list = document.getElementById('task-list');
 const empty = document.getElementById('empty');
 const errorBox = document.getElementById('error');
+const statusBox = document.getElementById('status');
 
 async function request(method, url, body) {
   const options = { method };
@@ -29,6 +30,14 @@ function clearError() {
   errorBox.textContent = '';
 }
 
+function announce(message) {
+  statusBox.textContent = message;
+}
+
+function clearStatus() {
+  statusBox.textContent = '';
+}
+
 function renderTask(task) {
   const item = document.createElement('li');
   item.className = 'task';
@@ -49,7 +58,7 @@ function renderTask(task) {
   removeButton.className = 'delete';
   removeButton.textContent = 'Excluir';
   removeButton.setAttribute('aria-label', `Excluir tarefa: ${task.title}`);
-  removeButton.addEventListener('click', () => deleteTask(task.id));
+  removeButton.addEventListener('click', () => deleteTask(task.id, task.title));
 
   item.append(checkbox, label, removeButton);
   return item;
@@ -71,6 +80,7 @@ async function loadTasks() {
 async function addTask(event) {
   event.preventDefault();
   clearError();
+  clearStatus();
 
   const title = input.value.trim();
   if (!title) {
@@ -82,7 +92,8 @@ async function addTask(event) {
   submitButton.disabled = true;
   input.value = '';
   try {
-    await request('POST', '/api/tasks', { title });
+    const task = await request('POST', '/api/tasks', { title });
+    announce(`Tarefa "${task.title}" adicionada.`);
     await loadTasks();
   } catch {
     input.value = title;
@@ -95,8 +106,10 @@ async function addTask(event) {
 
 async function toggleTask(id, checkbox) {
   clearError();
+  clearStatus();
   try {
-    await request('PATCH', `/api/tasks/${id}`, { completed: checkbox.checked });
+    const task = await request('PATCH', `/api/tasks/${id}`, { completed: checkbox.checked });
+    announce(`Tarefa "${task.title}" ${task.completed ? 'concluída' : 'reaberta'}.`);
   } catch {
     checkbox.checked = !checkbox.checked;
     showError('Não foi possível atualizar a tarefa.');
@@ -104,10 +117,16 @@ async function toggleTask(id, checkbox) {
   await loadTasks();
 }
 
-async function deleteTask(id) {
+async function deleteTask(id, title) {
+  if (!window.confirm(`Excluir a tarefa "${title}"?`)) {
+    return;
+  }
+
   clearError();
+  clearStatus();
   try {
     await request('DELETE', `/api/tasks/${id}`);
+    announce(`Tarefa "${title}" excluída.`);
   } catch {
     showError('Não foi possível excluir a tarefa.');
   }

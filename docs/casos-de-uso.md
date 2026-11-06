@@ -71,11 +71,14 @@ O sistema tem um único ator, o **Usuário**, pois o Ritmo é de uso pessoal e n
 
 ### UC04 — Excluir tarefa
 
-**Requisito:** RF08.
+**Requisitos:** RF08, RF19.
 
 1. O usuário aciona **Excluir** na tarefa.
-2. O sistema remove a tarefa, sem pedir confirmação, e recarrega a lista.
+2. O sistema pede confirmação ("Excluir a tarefa "título"?").
+3. O usuário confirma.
+4. O sistema remove a tarefa, anuncia a exclusão aos leitores de tela e recarrega a lista.
 
-**Fluxo alternativo**
+**Fluxos alternativos**
 
+- O usuário cancela a confirmação: nada é enviado e a tarefa permanece.
 - Falha na requisição (inclusive tarefa já excluída): a interface exibe "Não foi possível excluir a tarefa." e recarrega a lista.
